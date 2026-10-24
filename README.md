@@ -5,8 +5,8 @@
 chat, embeddings, text-to-speech and gateway options.
 
 ```bash
-pip install pydantic-ai-cloudflare-ai
-pip install "pydantic-ai-cloudflare-ai[all]"  # + anthropic, google, groq, mistral, typesafe, ws
+uv add pydantic-ai-cloudflare-ai
+uv add "pydantic-ai-cloudflare-ai[all]"  # + anthropic, google, groq, mistral, typesafe, ws
 ```
 
 Configured from `CLOUDFLARE_ACCOUNT_ID`, `CLOUDFLARE_API_TOKEN`, `CLOUDFLARE_GATEWAY_ID` and
