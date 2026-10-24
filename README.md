@@ -48,7 +48,9 @@ agent = Agent(gw.model("anthropic/claude-sonnet-4-5", api_key="sk-ant-..."))
 embedder = Embedder(gw.embedding_model("openai/text-embedding-3-small"))
 ```
 
-Routes: `openai`, `anthropic`, `google-ai-studio`, `groq`, `mistral`. The provider key is `api_key`, else the
+Routes: `openai`, `anthropic`, `google-ai-studio`, `groq`, `mistral`. Any other route is a gateway
+[custom provider](https://developers.cloudflare.com/ai-gateway/configuration/custom-providers/), called as
+OpenAI-compatible chat: `gw.model("xiaomi/mimo2.6-flash")` (or `"custom-xiaomi/..."`). The provider key is `api_key`, else the
 gateway token (BYOK / unified billing), else the provider's own env var. Without a gateway id it uses
 Cloudflare's `default` gateway, created on first use with authentication on, so it needs `CLOUDFLARE_GATEWAY_TOKEN`.
 

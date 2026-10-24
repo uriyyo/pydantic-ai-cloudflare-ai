@@ -2,7 +2,7 @@ import pytest
 from pydantic_ai.embeddings.openai import OpenAIEmbeddingModel
 from pydantic_ai.models.anthropic import AnthropicModel
 from pydantic_ai.models.google import GoogleModel
-from pydantic_ai.models.openai import OpenAIResponsesModel
+from pydantic_ai.models.openai import OpenAIChatModel, OpenAIResponsesModel
 
 from pydantic_ai_cloudflare_ai import AIGateway, gateway_embedding_model, gateway_model
 
@@ -34,9 +34,16 @@ def test_embedding_model():
     assert model.model_name == "text-embedding-3-small"
 
 
+def test_custom_provider_route():
+    for model_id in ("xiaomi/mimo2.6-flash", "custom-xiaomi/mimo2.6-flash"):
+        model = GW.model(model_id, api_key="sk")
+        assert isinstance(model, OpenAIChatModel)
+        assert model.model_name == "mimo2.6-flash"
+        assert model.client.base_url == "https://gateway.ai.cloudflare.com/v1/acct/gw/custom-xiaomi/"
+        assert model.profile.get("supports_thinking")
+
+
 def test_unknown_route():
-    with pytest.raises(ValueError, match="Unknown AI Gateway route"):
-        GW.model("xai/grok-4.7")
     with pytest.raises(ValueError, match="Unknown AI Gateway embedding route"):
         GW.embedding_model("anthropic/x")
 

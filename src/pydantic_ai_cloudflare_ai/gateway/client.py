@@ -106,7 +106,19 @@ class AIGateway(CloudflareAI):
                 )
                 return MistralModel(name, provider=provider)
             case _:
-                raise ValueError(f"Unknown AI Gateway route: {route!r} in model id {model_id!r}")
+                from pydantic_ai.models.openai import OpenAIChatModel
+                from pydantic_ai.profiles import ModelProfile
+
+                # Any other route is a gateway custom provider, served OpenAI-compatible at `custom-{slug}`.
+                route = route if route.startswith("custom-") else f"custom-{route}"
+                provider = OpenAIProvider(
+                    base_url=self.url(route),
+                    api_key=api_key,
+                    http_client=self.http(),
+                )
+                # Unknown model names get a non-thinking profile, which silently drops `thinking`; send it as
+                # `reasoning_effort` and let the provider reject it if unsupported.
+                return OpenAIChatModel(name, provider=provider, profile=ModelProfile(supports_thinking=True))
 
     def embedding_model(
         self,
