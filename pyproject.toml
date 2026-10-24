@@ -1,0 +1,67 @@
+[project]
+name = "pydantic-ai-cloudflare-ai"
+version = "0.1.0"
+description = "Cloudflare Workers AI and AI Gateway models for Pydantic AI"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+authors = [{ name = "Yurii Karabas", email = "1998uriyyo@gmail.com" }]
+dependencies = [
+    "annotated-types>=0.8.0",
+    "httpx2>=2.16.0",
+    "pydantic-ai-slim[openai]>=2.60.0",
+]
+
+[project.optional-dependencies]
+anthropic = ["pydantic-ai-slim[anthropic]"]
+google = ["pydantic-ai-slim[google]"]
+groq = ["pydantic-ai-slim[groq]"]
+mistral = ["pydantic-ai-slim[mistral]"]
+typesafe = ["pydantic-ai-slim[typesafe]"]
+ws = ["httpx2[ws]"]
+all = ["pydantic-ai-cloudflare-ai[anthropic,google,groq,mistral,typesafe,ws]"]
+
+[dependency-groups]
+dev = [
+  "pytest>=9.1.1",
+  "pytest-asyncio>=1.4.0",
+  "ruff>=0.17.2",
+  "ty>=0.0.91",
+  "prek>=0.5.7",
+  "pydantic-ai-cloudflare-ai[all]",
+  "pytest-httpx2>=1.0.0",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.3,<0.14.0"]
+build-backend = "uv_build"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+# pytest-httpx2 reads this marker but does not register it.
+markers = ["httpx2: configure the httpx2_mock fixture (respx.mock options)"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+  "D",
+  "ANN",
+  "FA",
+  "S101",
+  "PLR2004",
+  "TRY003",
+  "EM",
+  "TC",
+  "CPY",
+  "COM812",
+  "PLC0415",
+  "ASYNC109",
+  "PLR0913",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["S106", "INP001"]
